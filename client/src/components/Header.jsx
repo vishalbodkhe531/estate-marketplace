@@ -1,8 +1,11 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 function Header() {
+  const { authUser } = useAuthContext();
+
   return (
     <>
       <header className="bg-slate-200 shadow-md">
@@ -13,22 +16,17 @@ function Header() {
               <span className="text-slate-700">Estate</span>
             </h1>
           </Link>
-          <form
-            // onSubmit={handleSubmit}
-            className="bg-slate-100 p-3 rounded-lg flex items-center"
-          >
+          <form className="bg-slate-100 p-3 rounded-lg flex items-center">
             <input
               type="text"
               placeholder="Search..."
               className="bg-transparent focus:outline-none w-24 sm:w-64"
-              //   value={searchTerm}
-              //   onChange={(e) => setSearchTerm(e.target.value)}
             />
             <button>
               <FaSearch className="text-slate-600" />
             </button>
           </form>
-          <ul className="flex gap-4">
+          <ul className="flex gap-4 items-center">
             <Link to="/">
               <li className="hidden sm:inline text-slate-700 hover:underline  hover:text-blue-500">
                 Home
@@ -39,19 +37,18 @@ function Header() {
                 About
               </li>
             </Link>
-            <Link to="/sign-in">
-              {/* {currentUser ? (
+            <Link to="/profile">
+              {authUser ? (
                 <img
                   className="rounded-full h-7 w-7 object-cover"
-                  src={currentUser.avatar}
+                  src={authUser.profilePic}
                   alt="profile"
                 />
               ) : (
                 <li className=" text-slate-700 hover:underline"> Sign in</li>
-              )} */}
+              )}
               <li className=" text-slate-700 hover:underline  hover:text-blue-500">
                 {" "}
-                Sign in
               </li>
             </Link>
           </ul>

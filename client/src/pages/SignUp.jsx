@@ -1,10 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import useSignIn from "../hooks/useSignIn";
 import { useForm } from "react-hook-form";
+import useSignUp from "../hooks/useSignUp";
+import googleAuthUser from "../hooks/googleAuth";
 
 function SignUp() {
-  const { userSignIn } = useSignIn();
+  const { userSignUp, loading } = useSignUp();
+
+  const { handleAuthBtn } = googleAuthUser();
 
   const {
     register,
@@ -12,9 +15,14 @@ function SignUp() {
     formState: { errors },
   } = useForm();
 
-  const handleFormSubmit = handleSubmit((userData) => {
-    console.log(userData);
+  const handleFormSubmit = handleSubmit(async (userData) => {
+    await userSignUp(userData);
   });
+
+  const handleGoogleBtn = (e) => {
+    e.preventDefault();
+    handleGoogleBtn(userData);
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto mt-[7rem]">
@@ -47,7 +55,13 @@ function SignUp() {
           placeholder="password"
           className="border p-3 rounded-lg"
           id="password"
-          {...register("password", { required: "Password field is requird" })}
+          {...register("password", {
+            required: "password is requierd",
+            minLength: {
+              value: 6,
+              message: "password must be enter in 6 charectors",
+            },
+          })}
         />
         {errors.password && (
           <span className="text-red-500 text-sm">
@@ -56,13 +70,13 @@ function SignUp() {
         )}
 
         <button
-          // disabled={loading}
+          disabled={loading}
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
-          {/* {loading ? "Loading..." : "Sign Up"} */}
-          Sign Up
+          {loading ? "Loading..." : "Sign Up"}
         </button>
         {/* <OAuth /> */}
+        <button onClick={handleGoogleBtn}>SIGN WITH GOOGLE</button>
       </form>
       <div className="flex gap-2 mt-5">
         <p>Have an account?</p>

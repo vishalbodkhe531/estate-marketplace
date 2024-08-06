@@ -1,19 +1,14 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useAuthContext } from "../context/AuthContext";
-import { useState } from "react";
 
-const useSignIn = () => {
+const useSignUp = () => {
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
 
-  const { authUser, setAuthUser } = useAuthContext();
-
-  const userSignIn = async (formData) => {
-    // console.log(formData);
+  const userSignUp = async (formData) => {
     setLoading(true);
-    const Fetch_API = await fetch("/api/user/login", {
+    const Fetch_API = await fetch("/api/user/register", {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
@@ -23,19 +18,18 @@ const useSignIn = () => {
 
     const FetchData = await Fetch_API.json();
     console.log(FetchData);
+
     if (Fetch_API.ok) {
-      toast.success("user successfully login !!");
-      localStorage.setItem("Auth-User", JSON.stringify(FetchData));
-      setAuthUser(FetchData);
       setLoading(false);
-      return navigate("/");
+      toast.success("user successfully created !!");
+      return navigate("/sign-in");
     }
     if (FetchData.success === false) {
       setLoading(false);
       return toast.error(FetchData.message);
     }
   };
-  return { userSignIn, loading };
+  return { userSignUp, loading };
 };
 
-export default useSignIn;
+export default useSignUp;
