@@ -11,7 +11,6 @@ const useSignIn = () => {
   const { authUser, setAuthUser } = useAuthContext();
 
   const userSignIn = async (formData) => {
-    // console.log(formData);
     setLoading(true);
     const Fetch_API = await fetch("/api/user/login", {
       method: "POST",
@@ -22,7 +21,6 @@ const useSignIn = () => {
     });
 
     const FetchData = await Fetch_API.json();
-    console.log(FetchData);
     if (Fetch_API.ok) {
       toast.success("user successfully login !!");
       localStorage.setItem("Auth-User", JSON.stringify(FetchData));

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useSignIn from "../hooks/useSignIn";
 import googleAuthUser from "../hooks/googleAuth";
@@ -7,7 +7,7 @@ import googleAuthUser from "../hooks/googleAuth";
 function SignIn() {
   const { userSignIn, loading } = useSignIn();
 
-  const [formData, setFormData] = useState(null);
+  const [formData, setFormData] = useState("");
   const { handleAuthBtn } = googleAuthUser();
 
   const {
@@ -16,9 +16,9 @@ function SignIn() {
     formState: { errors },
   } = useForm();
 
-  const handleFormData = handleSubmit(async (userData) => {
-    setFormData(useForm);
-    await userSignIn(userData);
+  const handleFormData = handleSubmit((userData) => {
+    setFormData(userData);
+    userSignIn(userData);
   });
 
   const handleGoogleBtn = (e) => {

@@ -4,7 +4,6 @@ import { useAuthContext } from "../context/AuthContext";
 
 function ProtectRoutes() {
   const { authUser } = useAuthContext();
-  console.log(authUser);
   return authUser ? <Outlet /> : <Navigate to={"/sign-in"} />;
 }
 

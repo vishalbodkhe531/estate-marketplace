@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import { databaseConnection } from "./data/databaseConnection.js";
 import userRoutes from "./routes/user.Routes.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
+import cookieParser from "cookie-parser";
 config({ path: "./config/.env" });
 
 databaseConnection();
@@ -10,6 +11,8 @@ databaseConnection();
 const server = express();
 
 server.use(express.json());
+
+server.use(cookieParser());
 
 server.use("/api/user", userRoutes);
 
