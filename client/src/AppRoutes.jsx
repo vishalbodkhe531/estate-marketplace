@@ -13,6 +13,7 @@ import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import ProtectRoutes from "./components/ProtectRoutes";
 import UpdateProfile from "./pages/UpdateProfile";
+import CreateList from "./pages/CreateList";
 
 function AppRoutes() {
   return (
@@ -24,6 +25,7 @@ function AppRoutes() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/about" element={<About />} />
           <Route path="/update-profile" element={<UpdateProfile />} />
+          <Route path="/create-listing" element={<CreateList />} />
         </Route>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />

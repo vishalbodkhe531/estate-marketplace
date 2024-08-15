@@ -22,7 +22,6 @@ function Profile() {
   const [FileUploadErr, setFileUploadErr] = useState(false);
   const [formData, setFormdata] = useState({});
 
-  // console.log(formData);
   useUpdate(formData);
 
   useEffect(() => {
@@ -50,9 +49,8 @@ function Profile() {
         setFileUploadErr(true);
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(
-          (downloadURL) => setFormdata({ ...formData, avatar: downloadURL })
-          // useUpdate({ ...formData })
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+          setFormdata({ ...formData, avatar: downloadURL })
         );
       }
     );
@@ -71,7 +69,7 @@ function Profile() {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto mt-[7rem]">
+    <div className="p-3 max-w-lg mx-auto mt-[7rem] text-white">
       <div className="">
         <input
           type="file"
@@ -103,45 +101,46 @@ function Profile() {
         <h1 className="text-3xl text-center font-semibold my-7">Profile</h1>
       </div>
 
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4 ">
         <input
           type="text"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg text-black"
           readOnly
           value={authUser.userName}
         />
         <input
           type="email"
           placeholder="email"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg text-black"
           readOnly
           value={authUser.email}
         />
         <Link to={"/update-profile"}>
-          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 w-full">
+          <button className="bg-red-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 w-full mt-5">
             UPDATE PROFILE
+          </button>
+        </Link>
+        <Link to={"/create-listing"}>
+          <button className="bg-green-600 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 w-full">
+            create listing
           </button>
         </Link>
         <div className=" p-2 flex justify-between items-center mt-3">
           <button
-            className="hover:bg-black hover:text-white p-2 rounded-lg uppercase text-sm"
+            className="hover:bg-white hover:text-black p-2 rounded-lg uppercase text-sm"
             onClick={handleLogoutBtn}
           >
             logout User
           </button>
           <button
-            className="hover:bg-black hover:text-white p-2 rounded-lg uppercase text-sm"
+            className="hover:bg-white hover:text-black p-2 rounded-lg uppercase text-sm"
             onClick={handleDeleteBtn}
           >
             delete account
           </button>
         </div>
       </form>
-      <div className="flex gap-2 mt-5">
-        <Link to={"/sign-in"}>
-          <span className="text-blue-700">Sign in here !!</span>
-        </Link>
-      </div>
+      <div className="flex gap-2 mt-5"></div>
     </div>
   );
 }

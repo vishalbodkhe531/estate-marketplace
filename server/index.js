@@ -4,6 +4,7 @@ import { databaseConnection } from "./data/databaseConnection.js";
 import userRoutes from "./routes/user.Routes.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 import cookieParser from "cookie-parser";
+import listRoutes from "./routes/listing.routes.js";
 config({ path: "./config/.env" });
 
 databaseConnection();
@@ -15,6 +16,7 @@ server.use(express.json());
 server.use(cookieParser());
 
 server.use("/api/user", userRoutes);
+server.use("/api/listing", listRoutes);
 
 server.use(errorMiddleware);
 
