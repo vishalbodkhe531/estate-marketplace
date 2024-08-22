@@ -11,11 +11,14 @@ import {
 } from "firebase/storage";
 import { app } from "../firbase";
 import updateUser from "../hooks/updateUser";
+import getListing from "../hooks/getListing";
+import deleteHome from "../hooks/deleteHome";
 function Profile() {
   const { authUser } = useAuthContext();
   const { logout } = logoutUser();
   const { deleteBtn } = deleteUser();
   const { useUpdate } = updateUser();
+  const { allList, listData } = getListing();
 
   const [file, setFile] = useState(undefined);
   const [filePers, setFilePers] = useState(0);
@@ -24,19 +27,34 @@ function Profile() {
 
   useUpdate(formData);
 
+  const handleListBtn = () => {
+    allList();
+  };
+
   useEffect(() => {
     if (file) {
-      handleFileUpload(file); // Pass the file to the function
+      handleFileUpload(file);
     }
   }, [file]);
 
+  useEffect(() => {}, []);
+
+  const { deleteDetails } = deleteHome();
+
+  // const handleListingDelete = () => {
+  //   deleteDetails();
+  // };
+
+  const deleteList = (listId) => {
+    deleteDetails(listId);
+    allList();
+  };
+
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
-    const fileName = new Date().getTime() + file.name; // Ensure parentheses for getTime()
+    const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
-    // console.log(filePers);
 
     uploadTask.on(
       "state_changed",
@@ -140,7 +158,51 @@ function Profile() {
           </button>
         </div>
       </form>
-      <div className="flex gap-2 mt-5"></div>
+      <div className="flex justify-center">
+        <button className="text-green-500" onClick={handleListBtn}>
+          show listing{" "}
+        </button>
+      </div>
+      {listData && listData.length > 0 && (
+        <div className="flex flex-col gap-4">
+          <h1 className="text-center mt-7 text-2xl font-semibold">
+            Your Listings
+          </h1>
+          {listData.map((listing) => (
+            <div
+              key={listing._id}
+              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  src={listing.imageUrl[0]}
+                  alt="listing cover"
+                  className="h-16 w-16 object-contain"
+                />
+              </Link>
+              <Link
+                className="text-slate-700 font-semibold  hover:underline truncate flex-1"
+                to={`/listing/${listing._id}`}
+              >
+                <p>{listing.name}</p>
+              </Link>
+
+              <div className="flex flex-col item-center">
+                <button
+                  // onClick={() => deleteDetails(listing._id)}
+                  onClick={() => deleteList(listing._id)}
+                  className="text-red-700 uppercase"
+                >
+                  Delete
+                </button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-700 uppercase">Edit</button>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

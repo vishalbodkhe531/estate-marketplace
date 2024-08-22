@@ -1,26 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import uploadImage from "../hooks/uploadImage";
-import useListForm from "../hooks/useListForm";
+import { useAuthContext } from "../context/AuthContext";
+import useHotelForm from "../hooks/useHotelForm";
+// import { toast } from "react-toastify";
 
 function CreateList() {
   const { register, handleSubmit } = useForm();
-  const { imageUpload, formData, imageUploadError, uploading } = uploadImage();
+
+  const { imageUpload, imageUploadError, uploading } = uploadImage();
+
+  const { createHotelForm } = useHotelForm();
+
+  const { hotelURL, setHotelURL } = useAuthContext();
+
+  const [homeType, setHomeType] = useState("");
 
   const [files, setFiles] = useState([]);
-  const { useListFormData } = useListForm();
+
+  const [offer, setOffer] = useState(false);
+
   const handleFormSubmit = handleSubmit((userData) => {
-    // useListFormData(userData);
-    console.log(formData.imageUrls);
+    userData.imageUrl = hotelURL;
+    userData.type = homeType;
+    createHotelForm(userData);
+    setHotelURL([]);
   });
 
   const handleImageSubmit = async (e) => {
-    // console.log(`first`);
-    imageUpload(files, formData);
+    imageUpload(files);
   };
 
-  const handleDeleteImage = () => {
-    console.log(formData);
+  const handleDeleteImage = (url) => {
+    const result = hotelURL.filter((el) => el !== url);
+    setHotelURL(result);
   };
 
   return (
@@ -37,11 +50,11 @@ function CreateList() {
             type="text"
             placeholder="Name"
             className="border p-3 rounded-lg"
-            id="name"
+            id="homeName"
             maxLength="62"
             minLength="10"
             required
-            {...register("name", { required: "This feild is required" })}
+            {...register("homeName", { required: "This feild is required" })}
           />
           <textarea
             type="text"
@@ -63,9 +76,11 @@ function CreateList() {
             <div className="flex gap-2">
               <input
                 type="checkbox"
-                id="sale"
-                className="w-5"
-                {...register("Sell")}
+                id="sell"
+                readOnly
+                className="w-5 cursor-pointer"
+                onClick={() => setHomeType("sell")}
+                checked={homeType === "sell"}
               />
               <span>Sell</span>
             </div>
@@ -73,8 +88,10 @@ function CreateList() {
               <input
                 type="checkbox"
                 id="rent"
-                className="w-5"
-                {...register("Rent")}
+                readOnly
+                className="w-5 cursor-pointer"
+                onClick={() => setHomeType("rent")}
+                checked={homeType === "rent"}
               />
               <span>Rent</span>
             </div>
@@ -82,8 +99,8 @@ function CreateList() {
               <input
                 type="checkbox"
                 id="parking"
-                className="w-5 "
-                {...register("Parking spot")}
+                className="w-5 cursor-pointer"
+                {...register("parking")}
               />
               <span>Parking spot</span>
             </div>
@@ -91,8 +108,8 @@ function CreateList() {
               <input
                 type="checkbox"
                 id="furnished"
-                className="w-5"
-                {...register("Furnished")}
+                className="w-5 cursor-pointer"
+                {...register("furnished")}
               />
               <span>Furnished</span>
             </div>
@@ -100,8 +117,9 @@ function CreateList() {
               <input
                 type="checkbox"
                 id="offer"
-                className="w-5"
-                {...register("Offer")}
+                className="w-5 cursor-pointer"
+                onClick={() => (offer ? setOffer(false) : setOffer(true))}
+                {...register("offer")}
               />
               <span>Offer</span>
             </div>
@@ -110,26 +128,26 @@ function CreateList() {
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                id="bedrooms"
+                id="bedRooms"
                 min="1"
                 max="10"
                 required
                 defaultValue={"1"}
-                className="p-3 border border-gray-300 rounded-lg text-black"
-                {...register("Beds")}
+                className="p-3 border border-gray-300 rounded-lg text-black cursor-pointer"
+                {...register("bedRooms")}
               />
               <p>Beds</p>
             </div>
             <div className="flex items-center gap-2">
               <input
                 type="number"
-                id="bathrooms"
+                id="bathRooms"
                 min="1"
                 max="10"
                 required
                 defaultValue={"1"}
-                className="p-3 border border-gray-300 rounded-lg text-black"
-                {...register("Baths")}
+                className="p-3 border border-gray-300 rounded-lg text-black cursor-pointer"
+                {...register("bathRooms")}
               />
               <p>Baths</p>
             </div>
@@ -141,8 +159,8 @@ function CreateList() {
                 max="10000000"
                 defaultValue={"50"}
                 required
-                className="p-3 border border-gray-300 rounded-lg text-black"
-                {...register("Regular price")}
+                className="p-3 border border-gray-300 rounded-lg text-black cursor-pointer"
+                {...register("regularPrice")}
               />
               <div className="flex flex-col items-center">
                 <p>Regular price</p>
@@ -151,7 +169,7 @@ function CreateList() {
                 )} */}
               </div>
             </div>
-            {/* {formData.offer && (
+            {offer && (
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -160,18 +178,18 @@ function CreateList() {
                   max="10000000"
                   required
                   className="p-3 border border-gray-300 rounded-lg"
-                  onChange={handleChange}
-                  value={formData.discountPrice}
+                  {...register("discountPrice")}
                 />
+                {/* {setOffer(false)} */}
                 <div className="flex flex-col items-center">
                   <p>Discounted price</p>
 
-                  {formData.type === "rent" && (
-                    <span className="text-xs">($ / month)</span>
-                  )}
+                  {/* {allFormData.type === "rent" && ( */}
+                  <span className="text-xs">($ / month)</span>
+                  {/* )} */}
                 </div>
               </div>
-            )} */}
+            )}
           </div>
         </div>
         <div className="flex flex-col flex-1 gap-4">
@@ -189,7 +207,6 @@ function CreateList() {
               id="images"
               accept="image/*"
               multiple
-              // {...register("imageURL")}
             />
             <button
               type="button"
@@ -203,28 +220,25 @@ function CreateList() {
           <p className="text-red-700 text-sm">
             {imageUploadError && imageUploadError}
           </p>
-          {formData.imageUrls.length > 0 &&
-            formData.imageUrls.map((url, idx) => (
-              <div
-                className="flex justify-between p-3 border items-center"
-                key={formData.imageUrls[idx]}
+          {hotelURL.map((url, idx) => (
+            <div
+              key={url}
+              className="flex justify-between p-3 border items-center"
+            >
+              <img
+                src={url}
+                alt="listing image"
+                className="w-20 h-20 object-contain rounded-lg"
+              />
+              <button
+                type="button"
+                onClick={() => handleDeleteImage(url)}
+                className="p-3 text-red-700 rounded-lg uppercase hover:opacity-75"
               >
-                <img
-                  src={url}
-                  alt="listing image"
-                  className="w-20 h-20 object-contain rounded-lg"
-                />
-                <button
-                  type="button"
-                  // onClick={() => setDeleteImage(url)}
-                  onClick={() => imageUpload(url)}
-                  // onClick={() => setDeleteImage(idx)}
-                  className="p-3 text-red-700 rounded-lg uppercase hover:opacity-75"
-                >
-                  Delete
-                </button>
-              </div>
-            ))}
+                Delete
+              </button>
+            </div>
+          ))}
 
           <button
             // disabled={loading || uploading}

@@ -6,14 +6,16 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firbase";
+import { useAuthContext } from "../context/AuthContext";
 
 const uploadImage = () => {
-  const [formData, setFormData] = useState({ imageUrls: [] });
+  // const [formData, setFormData] = useState({ imageUrls: [] });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
 
+  const { setHotelURL } = useAuthContext();
+
   const imageUpload = (files, formData) => {
-    console.log(formData);
     if (files.length > 0 && files.length < 7) {
       setUploading(true);
       setImageUploadError(false);
@@ -24,10 +26,12 @@ const uploadImage = () => {
       }
       Promise.all(promises)
         .then((urls) => {
-          setFormData({
-            ...formData,
-            imageUrls: formData.imageUrls.concat(urls),
-          });
+          // setFormData({
+          //   ...formData,
+          //   imageUrls: formData.imageUrls.concat(urls),
+          // });
+
+          setHotelURL(urls);
           setImageUploadError(false);
           setUploading(false);
         })
@@ -40,7 +44,7 @@ const uploadImage = () => {
       setUploading(false);
     }
   };
-  return { imageUpload, formData, imageUploadError, uploading };
+  return { imageUpload, imageUploadError, uploading };
 };
 
 const storeImage = async (file) => {

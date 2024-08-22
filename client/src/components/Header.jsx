@@ -44,7 +44,7 @@ function Header() {
                   src={authUser.profilePic}
                 />
               ) : (
-                <li className=" text-slate-700 hover:underline"> Sign in</li>
+                <li className=" text-white hover:underline"> Sign in</li>
               )}
               <li className=" text-slate-700 hover:underline  hover:text-blue-500">
                 {" "}

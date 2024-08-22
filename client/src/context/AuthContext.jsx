@@ -11,8 +11,12 @@ export const AuthContextProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("Auth-User") || null)
   );
 
+  const [hotelURL, setHotelURL] = useState([]);
+
   return (
-    <AuthContext.Provider value={{ authUser, setAuthUser }}>
+    <AuthContext.Provider
+      value={{ authUser, setAuthUser, hotelURL, setHotelURL }}
+    >
       {children}
     </AuthContext.Provider>
   );

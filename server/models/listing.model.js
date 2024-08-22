@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const listSchema = new mongoose.Schema(
   {
-    name: {
+    homeName: {
       type: String,
       required: true,
     },
@@ -24,7 +24,7 @@ const listSchema = new mongoose.Schema(
 
     descountPrice: {
       type: Number,
-      required: true,
+      default: 0,
     },
 
     bathRooms: {
@@ -56,13 +56,13 @@ const listSchema = new mongoose.Schema(
       required: true,
     },
 
-    imageUrls: {
+    imageUrl: {
       type: Array,
       required: true,
     },
 
     userRef: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
   },

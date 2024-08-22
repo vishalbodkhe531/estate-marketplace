@@ -10,6 +10,7 @@ export const isAuthenticated = async (req, res, next) => {
     req.user = await User.findById({ _id: data._id });
     next();
   } catch (error) {
+    console.log("error : ", error);
     next(error);
   }
 };
